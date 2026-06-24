@@ -1,26 +1,239 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
+
+/* =============================================================================
+ * Funiverse (yoshos-ranking) — Theme tokens
+ *
+ * Palette extracted from /public/funiverse-logo.jpg (Super Smash Bros.
+ * community ranking PWA — mutual-agreement workflow).
+ *
+ *   background : #00011F  deep dark navy/indigo
+ *   primary    : #8EF9FF  neon cyan          (main action, "FUNIVERSE" text)
+ *   secondary  : #EA41D2  neon magenta       (highlight, pixel chevrons)
+ *   accent     : #FFFF07  neon yellow/lime   (disputed / attention state)
+ *   destructive: #FF4D6D  hot pink-red       (errors)
+ *   success    : #39FF8B  neon green         (approved)
+ *
+ * App is dark-by-default. :root is a light fallback in case `.dark` is removed.
+ * ===========================================================================*/
 
 @theme inline {
+  --font-heading: var(--font-geist-mono);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* Smash-specific semantic tokens */
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-pending: var(--pending);
+  --color-pending-foreground: var(--pending-foreground);
+
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+
+  --shadow-neon-primary: 0 0 14px -2px var(--primary),
+    0 0 32px -8px var(--primary);
+  --shadow-neon-secondary: 0 0 14px -2px var(--secondary),
+    0 0 32px -8px var(--secondary);
+  --shadow-neon-accent: 0 0 14px -2px var(--accent),
+    0 0 32px -8px var(--accent);
+  --shadow-neon-success: 0 0 14px -2px var(--success),
+    0 0 32px -8px var(--success);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* Light theme — fallback. The app ships in dark, this is here so removing
+ * `.dark` from <html> still renders something sensible. */
+:root {
+  --radius: 0.5rem;
+
+  --background: oklch(0.99 0 0);
+  --foreground: oklch(0.15 0 0);
+
+  --card: oklch(0.99 0 0);
+  --card-foreground: oklch(0.15 0 0);
+
+  --popover: oklch(0.99 0 0);
+  --popover-foreground: oklch(0.15 0 0);
+
+  --primary: oklch(0.67 0.18 200);
+  --primary-foreground: oklch(0.99 0 0);
+
+  --secondary: oklch(0.67 0.25 334);
+  --secondary-foreground: oklch(0.99 0 0);
+
+  --muted: oklch(0.96 0.01 280);
+  --muted-foreground: oklch(0.5 0.05 280);
+
+  --accent: oklch(0.85 0.18 110);
+  --accent-foreground: oklch(0.15 0 0);
+
+  --destructive: oklch(0.6 0.22 15);
+  --border: oklch(0.9 0.02 280);
+  --input: oklch(0.9 0.02 280);
+  --ring: oklch(0.67 0.18 200);
+
+  --success: oklch(0.7 0.2 152);
+  --success-foreground: oklch(0.99 0 0);
+  --warning: oklch(0.85 0.18 110);
+  --warning-foreground: oklch(0.15 0 0);
+  --pending: oklch(0.78 0.14 80);
+  --pending-foreground: oklch(0.15 0 0);
+
+  --chart-1: oklch(0.67 0.18 200);
+  --chart-2: oklch(0.67 0.25 334);
+  --chart-3: oklch(0.85 0.18 110);
+  --chart-4: oklch(0.7 0.2 152);
+  --chart-5: oklch(0.6 0.22 15);
+
+  --sidebar: oklch(0.98 0.01 280);
+  --sidebar-foreground: oklch(0.15 0 0);
+  --sidebar-primary: oklch(0.67 0.18 200);
+  --sidebar-primary-foreground: oklch(0.99 0 0);
+  --sidebar-accent: oklch(0.95 0.02 280);
+  --sidebar-accent-foreground: oklch(0.15 0 0);
+  --sidebar-border: oklch(0.9 0.02 280);
+  --sidebar-ring: oklch(0.67 0.18 200);
+}
+
+/* Dark theme — canonical app theme. Premium retro-arcade vibe. */
+.dark {
+  /* Surfaces */
+  --background: oklch(0.1135 0.0713 264.2); /* #00011F — deep dark navy */
+  --foreground: oklch(0.9364 0.0311 281.8); /* #E6E8FF — cool off-white */
+
+  --card: oklch(0.1744 0.0701 276.3); /* #0A0A2E — elevated surface */
+  --card-foreground: oklch(0.9364 0.0311 281.8);
+
+  --popover: oklch(0.1744 0.0701 276.3);
+  --popover-foreground: oklch(0.9364 0.0311 281.8);
+
+  /* Brand */
+  --primary: oklch(0.9199 0.0996 200.3); /* #8EF9FF — neon cyan */
+  --primary-foreground: oklch(0.1135 0.0713 264.2); /* dark navy on cyan */
+
+  --secondary: oklch(0.6708 0.2509 334.5); /* #EA41D2 — neon magenta */
+  --secondary-foreground: oklch(0.1135 0.0713 264.2);
+
+  --accent: oklch(0.9681 0.2103 109.8); /* #FFFF07 — neon yellow/lime */
+  --accent-foreground: oklch(0.1135 0.0713 264.2);
+
+  /* Subtle surfaces */
+  --muted: oklch(0.1744 0.0701 276.3);
+  --muted-foreground: oklch(0.6813 0.0636 279.4); /* #9095C0 */
+
+  /* States */
+  --destructive: oklch(0.6785 0.2131 14.7); /* #FF4D6D */
+
+  --success: oklch(0.8814 0.2183 151.8); /* #39FF8B */
+  --success-foreground: oklch(0.1135 0.0713 264.2);
+  --warning: oklch(0.9681 0.2103 109.8); /* matches accent */
+  --warning-foreground: oklch(0.1135 0.0713 264.2);
+  --pending: oklch(0.7805 0.1455 80); /* warm amber for "awaiting approval" */
+  --pending-foreground: oklch(0.1135 0.0713 264.2);
+
+  /* UI chrome */
+  --border: oklch(0.3216 0.0776 277.2);
+  --input: oklch(0.2627 0.0789 275.6);
+  --ring: oklch(0.9199 0.0996 200.3); /* focus = primary cyan */
+
+  /* Chart cycle: cyan → magenta → yellow → success → destructive */
+  --chart-1: oklch(0.9199 0.0996 200.3);
+  --chart-2: oklch(0.6708 0.2509 334.5);
+  --chart-3: oklch(0.9681 0.2103 109.8);
+  --chart-4: oklch(0.8814 0.2183 151.8);
+  --chart-5: oklch(0.6785 0.2131 14.7);
+
+  /* Sidebar */
+  --sidebar: oklch(0.1450 0.0720 270); /* slightly darker than card */
+  --sidebar-foreground: oklch(0.9364 0.0311 281.8);
+  --sidebar-primary: oklch(0.9199 0.0996 200.3);
+  --sidebar-primary-foreground: oklch(0.1135 0.0713 264.2);
+  --sidebar-accent: oklch(0.2179 0.0775 274.8);
+  --sidebar-accent-foreground: oklch(0.9364 0.0311 281.8);
+  --sidebar-border: oklch(0.3216 0.0776 277.2);
+  --sidebar-ring: oklch(0.9199 0.0996 200.3);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply font-sans;
+    color-scheme: dark;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer utilities {
+  .shadow-neon-primary {
+    box-shadow: var(--shadow-neon-primary);
+  }
+  .shadow-neon-secondary {
+    box-shadow: var(--shadow-neon-secondary);
+  }
+  .shadow-neon-accent {
+    box-shadow: var(--shadow-neon-accent);
+  }
+  .shadow-neon-success {
+    box-shadow: var(--shadow-neon-success);
+  }
+  .text-neon-primary {
+    color: var(--primary);
+    text-shadow: 0 0 12px color-mix(in oklch, var(--primary) 70%, transparent);
+  }
+  .text-neon-secondary {
+    color: var(--secondary);
+    text-shadow: 0 0 12px color-mix(in oklch, var(--secondary) 70%, transparent);
+  }
+  .text-neon-accent {
+    color: var(--accent);
+    text-shadow: 0 0 12px color-mix(in oklch, var(--accent) 70%, transparent);
+  }
 }
