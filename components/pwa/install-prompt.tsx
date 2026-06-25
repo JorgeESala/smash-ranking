@@ -7,6 +7,8 @@ import { Download, Share, Plus, X } from "lucide-react";
 type Platform = "android" | "ios" | "desktop" | "other";
 
 const DISMISS_KEY = "yoshos_install_dismissed";
+const JUST_INSTALLED_KEY = "yoshos_just_installed";
+const INSTALL_TTL_MS = 24 * 60 * 60 * 1000; // 24h
 
 function detectPlatform(): Platform {
   if (typeof window === "undefined") return "other";
@@ -30,12 +32,27 @@ export function InstallPrompt() {
       setDeferred(e as BeforeInstallPromptEvent);
       setShow(true);
     };
-    const onInstalled = () => setInstalled(true);
+    const onInstalled = () => {
+      setInstalled(true);
+      // Signal the post-install notification prompt to show on next page
+      // load. We store a timestamp so it can expire if the user doesn't
+      // open the app within 24h of installing.
+      localStorage.setItem(JUST_INSTALLED_KEY, Date.now().toString());
+    };
 
     queueMicrotask(() => {
       setPlatform(detected);
 
       if (window.matchMedia("(display-mode: standalone)").matches) {
+        // Already installed (e.g. opened from home screen) — also flag
+        // the post-install prompt so the user gets the notifications
+        // onboarding once if they haven't seen it yet.
+        const existing = localStorage.getItem(JUST_INSTALLED_KEY);
+        const expired =
+          !existing || Date.now() - parseInt(existing, 10) > INSTALL_TTL_MS;
+        if (expired) {
+          localStorage.setItem(JUST_INSTALLED_KEY, Date.now().toString());
+        }
         setInstalled(true);
         return;
       }

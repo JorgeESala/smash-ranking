@@ -237,3 +237,50 @@
     text-shadow: 0 0 12px color-mix(in oklch, var(--accent) 70%, transparent);
   }
 }
+
+/* ===== Post-install notification prompt animations ===== */
+@keyframes pulse-neon {
+  0%, 100% {
+    box-shadow: 0 0 14px -2px var(--primary), 0 0 32px -8px var(--primary);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 28px 2px var(--primary), 0 0 56px -4px var(--primary);
+    transform: scale(1.06);
+  }
+}
+.animate-pulse-neon {
+  animation: pulse-neon 2.4s ease-in-out infinite;
+}
+
+@keyframes slide-up-fade {
+  from {
+    transform: translateY(24px) scale(0.96);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+.animate-slide-up-fade {
+  animation: slide-up-fade 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.animate-fade-in {
+  animation: fade-in 0.2s ease-out;
+}
+
+@keyframes bell-ring {
+  0%, 50%, 100% { transform: rotate(0deg); }
+  10%, 30% { transform: rotate(-14deg); }
+  20%, 40% { transform: rotate(14deg); }
+}
+.animate-bell-ring {
+  animation: bell-ring 2.4s ease-in-out infinite;
+  transform-origin: 50% 10%;
+}

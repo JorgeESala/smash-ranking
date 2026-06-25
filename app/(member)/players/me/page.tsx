@@ -1,14 +1,23 @@
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { requireMember } from "@/lib/auth/require-member";
 import { PlayerAvatar } from "@/components/player/player-avatar";
 import { MatchCard } from "@/components/match/match-card";
-import { Trophy, Swords, TrendingUp, TrendingDown } from "lucide-react";
+import { Trophy, Swords, TrendingUp, TrendingDown, Bell, BellOff } from "lucide-react";
 
 export const metadata = { title: "Mi perfil" };
 
 export default async function MyProfilePage() {
   const ctx = await requireMember("/players/me");
   const supabase = await createClient();
+
+  // Check whether this user has any push subscriptions saved
+  const { count: pushSubCount } = await supabase
+    .from("push_subs")
+    .select("id", { count: "exact", head: true })
+    .eq("user_id", ctx.userId);
+
+  const hasPush = (pushSubCount ?? 0) > 0;
 
   const { data: matches } = await supabase
     .from("matches")
@@ -38,6 +47,38 @@ export default async function MyProfilePage() {
           <p className="text-sm text-muted-foreground">{ctx.email}</p>
         </div>
       </header>
+
+      {/* Notification status — always visible on the profile so users
+          have a one-tap way to find the push opt-in even if they
+          dismissed the post-install prompt. */}
+      <Link
+        href="/settings"
+        className={
+          "mb-6 flex items-center justify-between gap-3 rounded-lg border p-3 transition-colors " +
+          (hasPush
+            ? "border-success/30 bg-success/5 hover:bg-success/10"
+            : "border-primary/30 bg-primary/5 hover:bg-primary/10")
+        }
+      >
+        <div className="flex items-center gap-3">
+          {hasPush ? (
+            <Bell className="size-4 text-success" />
+          ) : (
+            <BellOff className="size-4 text-muted-foreground" />
+          )}
+          <div>
+            <p className="text-sm font-medium">
+              {hasPush ? "Notificaciones activadas" : "Notificaciones desactivadas"}
+            </p>
+            <p className="text-xs text-muted-foreground">
+              {hasPush
+                ? "Recibes un push cuando te reportan una partida."
+                : "Actívalas para aprobar o disputar sin abrir la app."}
+            </p>
+          </div>
+        </div>
+        <span className="text-xs text-muted-foreground">Configurar →</span>
+      </Link>
 
       <div className="mb-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
         <Stat label="Elo" value={ctx.player.current_elo} highlight />

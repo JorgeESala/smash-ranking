@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import { Toaster } from "@/components/ui/sonner";
 import { InstallPrompt } from "@/components/pwa/install-prompt";
+import { PostInstallPrompt } from "@/components/pwa/post-install-prompt";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -63,6 +64,7 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="dark" forcedTheme="dark">
           {children}
           <InstallPrompt />
+          <PostInstallPrompt />
           <Toaster position="top-center" />
         </ThemeProvider>
       </body>
