@@ -10,14 +10,26 @@ type PlayerRow = {
   games_played?: number;
   wins?: number;
   losses?: number;
+  is_demo?: boolean;
 };
 
 type Props = {
   players: PlayerRow[];
   compact?: boolean;
+  /**
+   * Show a small "Demo" badge next to players with `is_demo = true`.
+   * Used on /season/demo so visitors can tell the seeded fictional
+   * roster apart from real players. Off by default for the live
+   * /leaderboard where demo players are filtered out anyway.
+   */
+  showDemoBadge?: boolean;
 };
 
-export function LeaderboardTable({ players, compact = false }: Props) {
+export function LeaderboardTable({
+  players,
+  compact = false,
+  showDemoBadge = false,
+}: Props) {
   return (
     <div
       className={cn(
@@ -65,8 +77,16 @@ export function LeaderboardTable({ players, compact = false }: Props) {
                       nickname={p.nickname}
                       size="sm"
                     />
-                    <span className="font-medium hover:text-primary">
+                    <span className="flex items-center gap-2 font-medium hover:text-primary">
                       {p.nickname}
+                      {showDemoBadge && p.is_demo && (
+                        <span
+                          className="rounded border border-secondary/40 bg-secondary/10 px-1.5 py-0.5 font-mono text-[0.6rem] uppercase tracking-wider text-secondary"
+                          title="Jugador ficticio de la temporada demo"
+                        >
+                          Demo
+                        </span>
+                      )}
                     </span>
                   </Link>
                 </td>

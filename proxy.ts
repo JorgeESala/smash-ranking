@@ -6,7 +6,12 @@ import { type NextRequest, NextResponse } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 import type { Database } from "@/lib/supabase/types";
 
-const MEMBER_PREFIXES = ["/inbox", "/report", "/matches", "/players/me", "/settings"];
+// /matches and /matches/[id] are intentionally NOT in this list — they're
+// public so recruiters and visitors can browse the demo + recent activity
+// without signing in. The match detail page only renders the approve /
+// dispute / cancel action buttons for participants, and the server
+// actions re-check auth anyway.
+const MEMBER_PREFIXES = ["/inbox", "/report", "/players/me", "/settings"];
 const ADMIN_PREFIXES = ["/admin"];
 
 export async function proxy(request: NextRequest) {

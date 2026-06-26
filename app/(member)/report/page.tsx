@@ -9,10 +9,13 @@ export default async function ReportPage() {
   const ctx = await requireMember("/report");
   const supabase = await createClient();
 
-  // Roster: everyone except me, ordered by nickname
+  // Roster: real players only, ordered by nickname. Demo players are
+  // excluded so you can only report a match against someone who can
+  // actually log in and approve it.
   const { data: players } = await supabase
     .from("players")
     .select("id, nickname, avatar_url, current_elo")
+    .eq("is_demo", false)
     .neq("id", ctx.player.id)
     .order("nickname", { ascending: true });
 

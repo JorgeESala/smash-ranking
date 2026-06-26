@@ -46,6 +46,18 @@ export async function reportMatch(formData: FormData): Promise<ActionResult> {
 
   const supabase = await createClient();
 
+  // Defense in depth: even if the dropdown was bypassed, reject matches
+  // against demo players. Demo players can't log in to approve a match,
+  // so allowing this would create permanently-pending rows.
+  const { data: opponentRow } = await supabase
+    .from("players")
+    .select("is_demo")
+    .eq("id", d.opponentId)
+    .maybeSingle();
+  if (opponentRow?.is_demo) {
+    return { ok: false, error: "Solo puedes reportar partidas contra jugadores reales." };
+  }
+
   const { data: season } = await supabase
     .from("seasons")
     .select("id")

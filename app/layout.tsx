@@ -4,6 +4,8 @@ import { ThemeProvider } from "next-themes";
 import { Toaster } from "@/components/ui/sonner";
 import { InstallPrompt } from "@/components/pwa/install-prompt";
 import { PostInstallPrompt } from "@/components/pwa/post-install-prompt";
+import { ReportMatchFab } from "@/components/report-match-fab";
+import { getOptionalMember } from "@/lib/auth/require-member";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -49,11 +51,13 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const ctx = await getOptionalMember();
+
   return (
     <html
       lang="es"
@@ -65,6 +69,7 @@ export default function RootLayout({
           {children}
           <InstallPrompt />
           <PostInstallPrompt />
+          <ReportMatchFab isAuthenticated={!!ctx} />
           <Toaster position="top-center" />
         </ThemeProvider>
       </body>
