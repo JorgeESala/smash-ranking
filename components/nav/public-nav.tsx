@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Trophy, Swords, History, Info, LogIn, LogOut, User } from "lucide-react";
+import { Trophy, Swords, History, LogIn, LogOut, User, Sparkles } from "lucide-react";
 import { getOptionalMember } from "@/lib/auth/require-member";
 import { signOut } from "@/lib/auth/actions";
 import { Button } from "@/components/ui/button";
@@ -24,8 +24,10 @@ export async function PublicNav() {
           <NavLink href="/matches" icon={<History className="size-4" />}>
             Partidas
           </NavLink>
-          <NavLink href="/how-it-works" icon={<Info className="size-4" />}>
-            Cómo funciona
+          {/* Demo link — always visible so visitors and signed-in members
+              alike can find the populated showcase page. */}
+          <NavLink href="/season/demo" icon={<Sparkles className="size-4 text-secondary" />}>
+            Demo
           </NavLink>
 
           {ctx ? (

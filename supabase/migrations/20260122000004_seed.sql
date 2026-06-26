@@ -66,11 +66,12 @@ begin
       now(), now(), '', '', '', ''
     );
 
-    insert into players (auth_user_id, nickname, current_elo, peak_elo, games_played, wins, losses, last_seen_at)
+    insert into players (auth_user_id, nickname, current_elo, peak_elo, games_played, wins, losses, last_seen_at, is_demo)
     values (
       (select id from auth.users where email = format('demo+%s@yoshos.invalid', replace(nicknames[i], '_', '-'))),
       nicknames[i],
-      1200, 1200, 0, 0, 0, now() - (random() * interval '7 days')
+      1200, 1200, 0, 0, 0, now() - (random() * interval '7 days'),
+      true
     )
     returning id into p;
 

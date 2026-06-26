@@ -1,14 +1,14 @@
 import { notFound } from "next/navigation";
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
-import { requireMember } from "@/lib/auth/require-member";
+import { getOptionalMember } from "@/lib/auth/require-member";
 import { PlayerAvatar } from "@/components/player/player-avatar";
 import { MatchStatusBadge } from "@/components/match/match-status-badge";
 import { MatchActions } from "./match-actions";
 import { getFormat } from "@/lib/match-format";
 import { formatDate } from "@/lib/format";
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -18,7 +18,10 @@ export const metadata = { title: "Detalle de partida" };
 
 export default async function MatchDetailPage({ params }: Props) {
   const { id } = await params;
-  const ctx = await requireMember(`/matches/${id}`);
+  // Public page: anyone (signed in or not) can view the match detail.
+  // Action buttons (approve / dispute / cancel) only render for the
+  // two participants; the server actions re-check auth.
+  const ctx = await getOptionalMember();
   const supabase = await createClient();
 
   const { data: match } = await supabase
@@ -34,13 +37,14 @@ export default async function MatchDetailPage({ params }: Props) {
   const reporterWon = match.winner?.id === match.reporter?.id;
   const fmt = getFormat(match.format);
 
-  const isParticipant =
-    match.reporter?.id === ctx.player.id || match.opponent?.id === ctx.player.id;
+  const isParticipant = ctx
+    ? match.reporter?.id === ctx.player.id || match.opponent?.id === ctx.player.id
+    : false;
   const isPending = match.status === "pending";
   const isOpponentTurn =
-    isPending && match.opponent?.id === ctx.player.id;
+    isPending && ctx !== null && match.opponent?.id === ctx.player.id;
   const isReporter =
-    isPending && match.reporter?.id === ctx.player.id;
+    isPending && ctx !== null && match.reporter?.id === ctx.player.id;
 
   // Get actions history
   const { data: actions } = await supabase
@@ -51,9 +55,14 @@ export default async function MatchDetailPage({ params }: Props) {
 
   return (
     <main className="mx-auto max-w-2xl px-4 py-10">
-      <Button render={<Link href="/inbox" />} variant="ghost" size="sm" className="mb-4">
+      <Button
+        render={<Link href={isParticipant ? "/inbox" : "/matches"} />}
+        variant="ghost"
+        size="sm"
+        className="mb-4"
+      >
         <ArrowLeft />
-        Inbox
+        {isParticipant ? "Inbox" : "Partidas"}
       </Button>
 
       <header className="mb-6 flex items-center justify-between">
@@ -76,12 +85,14 @@ export default async function MatchDetailPage({ params }: Props) {
         )}
       </dl>
 
-      {/* Action panel */}
+      {/* Action panel — only for participants */}
       {isOpponentTurn && <MatchActions mode="approve-dispute" matchId={id} />}
       {isReporter && <MatchActions mode="cancel" matchId={id} />}
       {!isParticipant && match.status === "pending" && (
         <p className="rounded-md border border-dashed border-border bg-card/50 p-4 text-sm text-muted-foreground">
-          Esta partida está pendiente de aprobación por {match.opponent?.nickname}.
+          {ctx
+            ? `Esta partida está pendiente de aprobación por ${match.opponent?.nickname}.`
+            : `Inicia sesión para aprobar o disputar esta partida.`}
         </p>
       )}
       {match.status !== "pending" && (

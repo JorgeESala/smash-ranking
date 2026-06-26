@@ -8,6 +8,7 @@ export default async function LeaderboardPage() {
   const { data: players } = await supabase
     .from("players")
     .select("id, nickname, avatar_url, current_elo, games_played, wins, losses")
+    .eq("is_demo", false)
     .order("current_elo", { ascending: false })
     .limit(100);
 

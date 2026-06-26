@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "prebuild": "supabase db push --include-all",
     "dev": "next dev --webpack",
     "build": "next build --webpack",
     "build:turbopack": "next build",

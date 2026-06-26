@@ -104,6 +104,24 @@ export default async function HomePage() {
               color="accent"
             />
           </div>
+          <div className="mt-8 flex flex-col items-center justify-center gap-2 sm:flex-row sm:gap-3">
+            <Button
+              render={<Link href="/season/demo" />}
+              variant="secondary"
+              size="sm"
+            >
+              <Sparkles />
+              Ver demo con datos
+              <ArrowRight />
+            </Button>
+            <Button
+              render={<Link href="/how-it-works" />}
+              variant="ghost"
+              size="sm"
+            >
+              Cómo funciona
+            </Button>
+          </div>
         </div>
       </section>
 

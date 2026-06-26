@@ -52,6 +52,7 @@ export interface Database {
           games_played: number;
           wins: number;
           losses: number;
+          is_demo: boolean;
           created_at: string;
           last_seen_at: string;
         };
@@ -65,6 +66,7 @@ export interface Database {
           games_played?: number;
           wins?: number;
           losses?: number;
+          is_demo?: boolean;
           created_at?: string;
           last_seen_at?: string;
         };
