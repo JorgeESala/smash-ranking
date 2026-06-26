@@ -86,7 +86,7 @@ export default async function HomePage() {
               n={1}
               icon={<Swords className="size-5" />}
               title="Reporta"
-              desc="Elige a tu oponente, formato (mejor de 5, 3 o primero en 5) y los puntajes."
+              desc="Elige a tu oponente, formato (mejor de 5, 3 o FT5) y los puntajes."
               color="primary"
             />
             <Step

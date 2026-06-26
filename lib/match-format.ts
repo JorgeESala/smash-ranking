@@ -24,7 +24,7 @@ export const MATCH_FORMATS: {
   },
   {
     value: "first_to_5",
-    label: "Primero en 5",
+    label: "FT5",
     description: "Primero en ganar 5 juegos",
     maxWinner: 5,
     validLoserScores: [0, 1, 2, 3, 4],

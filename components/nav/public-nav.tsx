@@ -1,8 +1,9 @@
 import Link from "next/link";
-import { Trophy, Swords, History, LogIn, LogOut, User, Sparkles } from "lucide-react";
+import { Trophy, History, LogIn, LogOut, User, Sparkles } from "lucide-react";
 import { getOptionalMember } from "@/lib/auth/require-member";
 import { signOut } from "@/lib/auth/actions";
 import { Button } from "@/components/ui/button";
+import { InboxBell } from "./inbox-bell";
 
 export async function PublicNav() {
   const ctx = await getOptionalMember();
@@ -24,17 +25,10 @@ export async function PublicNav() {
           <NavLink href="/matches" icon={<History className="size-4" />}>
             Partidas
           </NavLink>
-          {/* Demo link — always visible so visitors and signed-in members
-              alike can find the populated showcase page. */}
-          <NavLink href="/season/demo" icon={<Sparkles className="size-4 text-secondary" />}>
-            Demo
-          </NavLink>
 
           {ctx ? (
             <>
-              <NavLink href="/inbox" icon={<Swords className="size-4" />}>
-                Inbox
-              </NavLink>
+              <InboxBell playerId={ctx.player.id} />
               <NavLink href="/players/me" icon={<User className="size-4" />}>
                 {ctx.player.nickname}
               </NavLink>
@@ -50,10 +44,17 @@ export async function PublicNav() {
               </form>
             </>
           ) : (
-            <Button render={<Link href="/login" />} variant="ghost" size="sm">
-              <LogIn className="size-4" />
-              Entrar
-            </Button>
+            <>
+              {/* Demo link — visitors only. Signed-in members get the
+                  real data on their own leaderboard. */}
+              <NavLink href="/season/demo" icon={<Sparkles className="size-4 text-secondary" />}>
+                Demo
+              </NavLink>
+              <Button render={<Link href="/login" />} variant="ghost" size="sm">
+                <LogIn className="size-4" />
+                Entrar
+              </Button>
+            </>
           )}
         </nav>
       </div>

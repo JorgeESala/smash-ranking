@@ -20,7 +20,7 @@ export default function HowItWorksPage() {
           icon={<Swords className="size-5" />}
           color="primary"
           title="Reporta la partida"
-          body="Cuando termines de jugar, abre la app y reporta el resultado. Elige a tu oponente de la lista de jugadores, el formato (mejor de 5, mejor de 3, o primero en 5) y los puntajes finales."
+          body="Cuando termines de jugar, abre la app y reporta el resultado. Elige a tu oponente de la lista de jugadores, el formato (mejor de 5, mejor de 3, o FT5) y los puntajes finales."
         />
         <Step
           n={2}
