@@ -45,3 +45,34 @@ function Button({ className, render, ...props }) {
 ```
 
 See `components/ui/button.tsx` for the working pattern.
+
+# Deploy workflow (Vercel)
+
+Vercel's build sandbox does **not** have the Supabase CLI installed, so
+`package.json` has **no `prebuild` hook**. Migrations must be applied
+manually *before* pushing to Vercel:
+
+```bash
+npx supabase db push --include-all
+git push
+```
+
+All migrations are idempotent (`create table if not exists`,
+`create or replace function`, `add column if not exists`, seed wrapped in
+`if exists`), so re-running on a remote that's already in sync is safe —
+`db push` simply reports "Remote database is up to date".
+
+## Environment variables on Vercel
+
+Two categories, both required:
+
+- **Runtime (used by the app):** `NEXT_PUBLIC_SUPABASE_URL`,
+  `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`,
+  `NEXT_PUBLIC_INVITE_CODE`, `ADMIN_USER_IDS`, `VAPID_*` (4 keys).
+- **Build-time (not used in this workflow anymore):** none — we removed
+  the prebuild hook.
+
+If you ever need automatic migrations on deploy, the cheapest path is
+`npm i -D supabase` + setting `SUPABASE_ACCESS_TOKEN` and
+`SUPABASE_PROJECT_REF` in Vercel env vars. Don't do this until the
+project has more contributors.
