@@ -49,8 +49,7 @@ export default async function HomePage() {
               YOSHOS RANKING
             </h1>
             <p className="mx-auto max-w-md text-balance text-sm text-muted-foreground sm:text-base">
-              Ranking comunitario de Super Smash Bros. con flujo de aprobación
-              mutua. Reporta una partida, tu oponente la aprueba, y el Elo se
+              Aplicación de ranking de smash bros para el grupo de Yoshos (funiverse). Reporta el resultado del match, tu oponente lo confirma, y el ranking (elo) se
               actualiza en tiempo real.
             </p>
           </div>
