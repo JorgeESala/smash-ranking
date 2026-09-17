@@ -36,7 +36,7 @@ export default async function HomePage() {
           <div className="relative h-28 w-28 sm:h-36 sm:w-36">
             <Image
               src="/funiverse-logo.jpg"
-              alt="Funiverse — El Multiversó de la Diversión"
+              alt="Funiverse — El Multiverso de la Diversión"
               fill
               priority
               sizes="(max-width: 640px) 7rem, 9rem"
@@ -49,7 +49,7 @@ export default async function HomePage() {
               YOSHOS RANKING
             </h1>
             <p className="mx-auto max-w-md text-balance text-sm text-muted-foreground sm:text-base">
-              Aplicación de ranking de smash bros para el grupo de Yoshos (funiverse). Reporta el resultado del match, tu oponente lo confirma, y el ranking (elo) se
+              Aplicación de ranking para Smash Bros del grupo Yoshos (funiverse). Reporta el resultado del match, tu oponente lo confirma y el ranking (elo) se
               actualiza en tiempo real.
             </p>
           </div>
@@ -198,7 +198,7 @@ export default async function HomePage() {
 
       <footer className="mt-auto border-t border-border py-6">
         <p className="text-center text-xs text-muted-foreground">
-          Yoshos Ranking · El multiversó de la diversión
+          Yoshos Ranking · El multiverso de la diversión
         </p>
       </footer>
     </>
